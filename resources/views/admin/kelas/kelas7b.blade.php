@@ -1,3 +1,23 @@
+<!-- include('./database.php');
+
+function select($query)
+{
+    //panggil koneksi database
+    global $db;
+
+    $result = mysqli_query($db, $query);
+    $rows = [];
+
+    while ($row = mysqli_fetch_assoc($result)) {
+        $rows[] = $row;
+    }
+
+    return $rows;
+}
+
+$data_siswa = select("SELECT * FROM tb_kelas7b"); -->
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -31,50 +51,80 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-4 text-gray-800"><b>Data Kelas 7B</b></h1>
+                    <h1 class="h3 mb-4 text-gray-800"><b>Kelas</b></h1>
                     <div class="card mb-4">
                         <div class="card-header">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#myModal">
-                                Tambah Siswa
-                            </button>
+                            <!-- Button trigger modal -->
+                            <a href="/tambahsiswa7b" class="btn btn-primary">Tambah Siswa</a>
+                            <a href="/trashsiswa7b" class="btn btn-danger">Sampah</a>
                         </div>
+                        @if ($message = Session::get('success'))
+                        <div class="alert alert-primary" role="alert">
+                            {{$message}}
+                        </div>
+                        @endif
+
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Data Siswa Kelas 7B</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">Data Siswa</h6>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-hover table-striped">
+                                        @php
+
+                                        $no = 1;
+
+                                        @endphp
                                         <thead>
                                             <tr>
-                                                <th width="50" height="10">No.</th>
-                                                <th>Foto</th>
-                                                <th>Nama</th>
-                                                <th>Kelas</th>
-                                                <th width="200" height="10">Aksi</th>
+                                                <th class="text-center" width="50" height="10">No.</th>
+                                                <th class="text-center" width="150">NIS</th>
+                                                <th class="text-center" width="120">Foto</th>
+                                                <th class="text-center">Nama</th>
+                                                <th class="text-center">Kelas</th>
+                                               
+                                                <th class="text-center" width="100" height="10">Aksi</th>
                                             </tr>
                                         </thead>
+                                        @foreach($db_smpitdu as $index => $ds)
+
                                         <tbody>
+
                                             <tr>
-                                                <td align="center">1</td>
-                                                <td><img src={{ asset('../template/img/aku.JPG') }} width="50" height="70"></td>
-                                                <td>Wahyu Cahyo Saputra</td>
-                                                <td>12 RPL 2</td>
-                                                <td align="center">
-                                                    <button class="btn btn-info btn-xs">Edit</button>
-                                                    <button class="btn btn-danger btn-xs">Delete</button>
+                                                <td align="center" scope="ds">{{ $index + $db_smpitdu->firstItem() }}</td>
+                                                <td align="center">{{ $ds->id }}</td>
+                                                <td>
+                                                    <img src="{{ asset('fotosiswa7b/'.$ds->foto)}}" alt="" style="max-height: 151px; max-width: 100px;">
                                                 </td>
+                                                <td>{{ $ds->nama }}</td>
+                                                <td align="center">{{ $ds->kelas }}</td>
+                                               
+                                                <td class="btn-group">
+                                                    <button type="button" class="btn btn-primary btn-xs">Action</button>
+                                                    <button type="button" class="btn btn-primary btn-xs dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                                        <span class="sr-only">Toggle Dropdown</span>
+                                                    </button>
+                                                    <div class="dropdown-menu" role="menu">
+                                                        <a class="dropdown-item" href='/tampilkandatasiswa7b/{{ $ds->id }}'>Edit</a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item" href='/deletesiswa7b/{{ $ds->id }}'>Hapus</a>
+                                                    </div>
+                                                </td>
+                                               
 
                                             </tr>
+
                                         </tbody>
+                                        @endforeach
                                     </table>
+                                    {{ $db_smpitdu->links() }}
+                                    <!-- Modal -->
                                 </div>
                             </div>
                         </div>
 
                     </div>
-                    <!-- /.container-fluid -->
 
                 </div>
             </div>
@@ -82,10 +132,9 @@
             @include('template.footer')
             <!-- End of Footer -->
 
-
-
         </div>
         <!-- /.container-fluid -->
+
     </div>
     <!-- End of Main Content -->
 
@@ -102,8 +151,7 @@
     </a>
 
     <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -116,7 +164,7 @@
                     anda yakin?</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <a class="btn btn-primary" href="login">Logout</a>
                 </div>
             </div>
         </div>

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -33,77 +32,87 @@
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-4 text-gray-800"><b>Ekstrakulikuler</b></h1>
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#myModal">
-                                Tambah Ekstra
-                            </button>
+                    <div class="card-header">
+                        <!-- Button trigger modal -->
+                        <a href="/create" class="btn btn-primary">Tambah Extrakulikuler</a>
+                        <a href="/trashextra" class="btn btn-danger">Sampah</a>
+                    </div>
+                    @if ($message = Session::get('success'))
+                        <div class="alert alert-primary" role="alert">
+                            {{$message}}
+                        </div> 
+                        @endif
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Data Ekstra</h6>
                         </div>
-                        <div class="card shadow mb-4">
-                            <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Data Ekstra</h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-hover table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th width="50" height="10">No.</th>
-                                                <th>Foto</th>
-                                                <th>Ekstra</th>
-                                                <th>Jadwal</th>
-                                                <th>Jam</th>
-                                                <th>Lokasi</th>
-                                                <th width="300" height="10">Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td align="center">1</td>
-                                                <td><img src={{ asset('../template/img/extra1.png') }} width="100" height="50"></td>
-                                                <td>Ekstrakulikuler Basket</td>
-                                                <td>Hari Senin</td>
-                                                <td>15.00-17.00</td>
-                                                <td>Lapangan Basket</td>
-                                                <td align="center">
-                                                    <button class="btn btn-success btn-xs">View</button>
-                                                    <button class="btn btn-info btn-xs">Edit</button>
-                                                    <button class="btn btn-danger btn-xs">Delete</button>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover table-striped">
+                                    @php
+
+                                    $no = 1;
+
+                                    @endphp
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center" width="50" height="10">No.</th>
+                                            <th class="text-center" width="300">Foto</th>
+                                            <th class="text-center">Ekstra</th>
+                                            <th class="text-center">Jadwal</th>
+                                            <th class="text-center">Jam</th>
+                                            <th class="text-center">Lokasi</th>
+                                            <th class="text-center" width="100" height="10">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    @foreach($db_smpitdu as $index => $ds)
+                                    <tbody>
+                                        <tr>
+                                            <td align="center" scope="ds">{{  $index + $db_smpitdu->firstItem() }}</td>
+                                            <td align="center"><img src="{{asset('cover/'.$ds->cover) }}" alt=""  style="height: 100px;"></td>
+                                            <td>{{ $ds->judul }}</td>
+                                            <td>{{ $ds->jadwal }}</td>
+                                            <td>{{ $ds->jam }}</td>
+                                            <td>{{ $ds->lokasi }}</td>
+                                              
+                                            <td class="btn-group">
+                                                    <button type="button" class="btn btn-primary btn-xs">Action</button>
+                                                    <button type="button" class="btn btn-primary btn-xs dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                                        <span class="sr-only">Toggle Dropdown</span>
+                                                    </button>
+                                                    <div class="dropdown-menu" role="menu">
+                                                        <a class="dropdown-item" href='/detailextra/{{ $ds->id }}'>View</a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item" href='/tampilkandataextra/{{ $ds->id }}'>Edit</a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item" href='/deleteextra/{{ $ds->id }}'>Hapus</a>
+                                                    </div>
                                                 </td>
 
-                                            </tr>
-                                            <tr>
-                                                <td align="center">2</td>
-                                                <td><img src={{ asset('../template/img/extra2.png') }} width="100" height="50"></td>
-                                                <td>Ekstrakulikuler Pramuka</td>
-                                                <td>Hari Jum'at</td>
-                                                <td>14.00-16.00</td>
-                                                <td>Halaman Sekolah</td>
-                                                <td align="center">
-                                                    <button class="btn btn-success btn-xs">View</button>
-                                                    <button class="btn btn-info btn-xs">Edit</button>
-                                                    <button class="btn btn-danger btn-xs">Delete</button>
-                                                </td>
+                                        </tr>
 
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                    </tbody>
+                                    @endforeach
+                                </table>
+                             
                             </div>
+
                         </div>
 
                     </div>
+                    
 
                 </div>
                 <!-- /.container-fluid -->
 
             </div>
             <!-- End of Main Content -->
+            
 
             <!-- Footer -->
             @include('template.footer')
             <!-- End of Footer -->
+            
 
         </div>
         <!-- End of Content Wrapper -->
@@ -122,21 +131,22 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Bersiap untuk Keluar?</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-body">Anda perlu memasukan ulang username dan kata sandi ketika masuk halaman, apakah anda yakin?</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <a class="btn btn-primary" href="login">Logout</a>
                 </div>
             </div>
         </div>
     </div>
 
-   
+
+
     @include('template.script')
 
 </body>

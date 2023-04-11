@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -32,14 +31,18 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-4 text-gray-800"><B>Event Yang Akana Datang</b></h1>
+                    <h1 class="h3 mb-4 text-gray-800"><b>Event</b></h1>
                     <div class="card mb-4">
                         <div class="card-header">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#myModal">
-                                Tambah Event
-                            </button>
+                            <!-- Button trigger modal -->
+                            <a href="/tambahevent" class="btn btn-primary">Tambah Event</a>
+                            <a href="/trashevent" class="btn btn-danger">Sampah</a>
                         </div>
+                        @if ($message = Session::get('success'))
+                        <div class="alert alert-primary" role="alert">
+                            {{$message}}
+                        </div>
+                        @endif
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
                                 <h6 class="m-0 font-weight-bold text-primary">Data Event</h6>
@@ -49,64 +52,70 @@
                                     <table class="table table-bordered table-hover table-striped">
                                         <thead>
                                             <tr>
-                                                <th width="50" height="10">No.</th>
-                                                <th>Foto</th>
-                                                <th>Event</th>
-                                                <th>Peserta</th>
-                                                <th>Tanggal</th>
-                                                <th>Lokasi</th>
-                                                <th width="300" height="10">Aksi</th>
+                                                <th class="text-center" width="50" height="10">No.</th>
+                                                <th class="text-center" width="300">Foto</th>
+                                                <th class="text-center">Event</th>
+                                                <th class="text-center">Peserta</th>
+                                                <th class="text-center">Tanggal</th>
+                                                <th class="text-center">Status</th>
+                                                <th class="text-center">Lokasi</th>
+                                                <th class="text-center" width="100" height="10">Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td align="center">1</td>
-                                                <td><img src={{ asset('../template/img/event1.png') }} width="100" height="50"></td>
-                                                <td>Camping</td>
-                                                <td>kelas 7-9</td>
-                                                <td>12/10/2022</td>
-                                                <td>Halaman Sekolah</td>
-                                                <td align="center">
-                                                    <button class="btn btn-success btn-xs">View</button>
-                                                    <button class="btn btn-info btn-xs">Edit</button>
-                                                    <button class="btn btn-danger btn-xs">Delete</button>
-                                                </td>
+                                            @foreach($db_smpitdu as $index => $ds)
 
-                                            </tr>
-                                            <tr>
-                                                <td align="center">2</td>
-                                                <td><img src={{ asset('../template/img/event2.png') }} width="100" height="50"></td>
-                                                <td>Teater</td>
-                                                <td>kelas 7-9</td>
-                                                <td>28/10/2022</td>
-                                                <td>Halaman Sekolah</td>
-                                                <td align="center">
-                                                    <button class="btn btn-success btn-xs">View</button>
-                                                    <button class="btn btn-info btn-xs">Edit</button>
-                                                    <button class="btn btn-danger btn-xs">Delete</button>
-                                                </td>
+                                        <tbody>
 
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                            <tr>
+                                                <td align="center" scope="ds">{{ $index + $db_smpitdu->firstItem() }}</td>
+                                                <td align="center">
+                                                    <img src="{{ asset('fotoevent/'.$ds->foto)}}" alt=""  style="height: 100px;">
+                                                </td>
+                                                <td>{{ $ds->event }}</td>
+                                                <td>{{ $ds->peserta }}</td>
+                                                <td>{{ $ds->tanggal }}</td>
+                                                <td>{{ $ds->status }}</td>
+                                                <td>{{ $ds->lokasi }}</td>
+                                                <td class="btn-group">
+                                                    <button type="button" class="btn btn-primary btn-xs">Action</button>
+                                                    <button type="button" class="btn btn-primary btn-xs dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                                        <span class="sr-only">Toggle Dropdown</span>
+                                                    </button>
+                                                    <div class="dropdown-menu" role="menu">
+                                                        <a class="dropdown-item" href='/detailevent/{{ $ds->id }}'>View</a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item" href='/tampilkandataevent/{{ $ds->id }}'>Edit</a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item" href='/deleteevent/{{ $ds->id }}'>Hapus</a>
+                                                    </div>
+                                                </td>
                                 </div>
+
+                                </tr>
+
+                                </tbody>
+                                @endforeach
+                                </table>
+                                {{ $db_smpitdu->links() }}
+                                <!-- Modal -->
                             </div>
                         </div>
-
                     </div>
-
                 </div>
-                <!-- /.container-fluid -->
 
             </div>
-            <!-- End of Main Content -->
-
-            <!-- Footer -->
-            @include('template.footer')
-            <!-- End of Footer -->
+            <!-- /.container-fluid -->
 
         </div>
-        <!-- End of Content Wrapper -->
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        @include('template.footer')
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
 
     </div>
     <!-- End of Page Wrapper -->
@@ -117,26 +126,26 @@
     </a>
 
     <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Bersiap untuk Keluar?</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-body">Anda perlu memasukan ulang username dan kata sandi ketika masuk halaman, apakah anda yakin?</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <a class="btn btn-primary" href="login">Logout</a>
                 </div>
             </div>
         </div>
     </div>
 
-   
+
+
     @include('template.script')
 
 </body>

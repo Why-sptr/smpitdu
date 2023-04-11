@@ -34,11 +34,16 @@
                     <h1 class="h3 mb-4 text-gray-800"><b>Prestasi</b></h1>
                     <div class="card mb-4">
                         <div class="card-header">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#myModal">
-                                Tambah Prestasi
-                            </button>
+                            <!-- Button trigger modal -->
+                            <a href="/tambahprestasi" class="btn btn-primary">Tambah Prestasi</a>
+                            <a href="/trashprestasi" class="btn btn-danger">Sampah</a>
+                            <a href="/tambahjuara" class="btn btn-primary">Tambah Juara</a>
                         </div>
+                        @if ($message = Session::get('success'))
+                        <div class="alert alert-primary" role="alert">
+                            {{$message}}
+                        </div>
+                        @endif
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
                                 <h6 class="m-0 font-weight-bold text-primary">Data Prestasi</h6>
@@ -48,44 +53,43 @@
                                     <table class="table table-bordered table-hover table-striped">
                                         <thead>
                                             <tr>
-                                                <th width="50" height="10">No.</th>
-                                                <th>Medal</th>
-                                                <th>Juara</th>
-                                                <th>Tahun</th>
-                                                <th>Tingkat</th>
-                                                <th width="300" height="10">Aksi</th>
+                                                <th class="text-center" width="50" height="10">No.</th>
+                                                <th class="text-center" width="100" height="10">Medal</th>
+                                                <th class="text-center">Juara</th>
+                                                <th class="text-center">Lomba</th>
+                                                <th class="text-center">Tingkat</th>
+                                                <th class="text-center" width="100" height="10">Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach($db_smpitdu as $index => $ds)
                                             <tr>
-                                                <td align="center">1</td>
-                                                <td><img src={{ asset('../template/img/emas.png') }} width="50" height="50"></td>
-                                                <td>0SN Matematika</td>
-                                                <td>2022</td>
-                                                <td>Juara Nasional</td>
+                                                <td align="center" scope="ds">{{ $index + $db_smpitdu->firstItem() }}</td>
                                                 <td align="center">
-                                                    <button class="btn btn-success btn-xs">View</button>
-                                                    <button class="btn btn-info btn-xs">Edit</button>
-                                                    <button class="btn btn-danger btn-xs">Delete</button>
+                                                <img src="{{ asset('fotojuara/'.$ds->juara->medal)}}" alt="" style="max-height: 151px; max-width: 100px;">
                                                 </td>
-
-                                            </tr>
-                                            <tr>
-                                                <td align="center">2</td>
-                                                <td><img src={{ asset('../template/img/silver.png') }} width="50" height="50"></td>
-                                                <td>Popda Lari</td>
-                                                <td>2022</td>
-                                                <td>Juara 2 Kabupaten</td>
-                                                <td align="center">
-                                                    <button class="btn btn-success btn-xs">View</button>
-                                                    <button class="btn btn-info btn-xs">Edit</button>
-                                                    <button class="btn btn-danger btn-xs">Delete</button>
+                                                <td>{{ $ds->juara->juara }}</td>
+                                                <td>{{ $ds->lomba }}</td>
+                                                <td>{{ $ds->tingkat }}</td>
+                                                <td class="btn-group">
+                                                    <button type="button" class="btn btn-primary btn-xs">Action</button>
+                                                    <button type="button" class="btn btn-primary btn-xs dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                                        <span class="sr-only">Toggle Dropdown</span>
+                                                    </button>
+                                                    <div class="dropdown-menu" role="menu">
+                                                        <a class="dropdown-item" href='/tampilkandataprestasi/{{ $ds->id }}'>Edit</a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item" href='/deleteprestasi/{{ $ds->id }}'>Hapus</a>
+                                                    </div>
                                                 </td>
 
                                             </tr>
                                         </tbody>
+                                        @endforeach
                                     </table>
+                                    {{ $db_smpitdu->links() }}
                                 </div>
+
                             </div>
                         </div>
 
@@ -113,24 +117,24 @@
     </a>
 
     <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Bersiap untuk Keluar?</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-body">Anda perlu memasukan ulang username dan kata sandi ketika masuk halaman, apakah anda yakin?</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <a class="btn btn-primary" href="login">Logout</a>
                 </div>
             </div>
         </div>
     </div>
+
 
 
     @include('template.script')

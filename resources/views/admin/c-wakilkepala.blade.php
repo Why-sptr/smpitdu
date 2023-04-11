@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -35,11 +34,15 @@
                     <h1 class="h3 mb-4 text-gray-800"><b>Wakil Kepala</b></h1>
                     <div class="card mb-4">
                         <div class="card-header">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#myModal">
-                                Tambah Wakil Kepala
-                            </button>
+                            <!-- Button trigger modal -->
+                            <a href="/tambahwakil" class="btn btn-primary">Tambah Wakil Kepala</a>
+                            <a href="/trashwakil" class="btn btn-danger">Sampah</a>
                         </div>
+                        @if ($message = Session::get('success'))
+                        <div class="alert alert-primary" role="alert">
+                            {{$message}}
+                        </div>
+                        @endif
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
                                 <h6 class="m-0 font-weight-bold text-primary">Data Wakil Kepala Sekolah</h6>
@@ -49,63 +52,40 @@
                                     <table class="table table-bordered table-hover table-striped">
                                         <thead>
                                             <tr>
-                                                <th width="50" height="10">No.</th>
-                                                <th>Foto</th>
-                                                <th>Nama</th>
-                                                <th>Jabatan</th>
-                                                <th width="200" height="10">Aksi</th>
+                                                <th class="text-center" width="50" height="10">No.</th>
+                                                <th class="text-center" width="120">Foto</th>
+                                                <th class="text-center">Nama</th>
+                                                <th class="text-center">Jabatan</th>
+                                                <th class="text-center" width="100" height="10">Aksi</th>
                                             </tr>
                                         </thead>
-                                       <tbody>
 
+                                        @foreach($db_smpitdu as $index => $ds)
+                                        <tbody>
 
                                             <tr>
-                                                <td align="center">1</td>
-                                                <td><img src={{ asset('../template/img/muka.png') }} width="70" height="70"></td>
-                                                <td>A. Zaenal Arifin, S.Ag</td>
-                                                <td>Wakil Kepala Bagian Kesiswaan</td>
-                                                <td align="center">
-                                                    <button class="btn btn-info btn-xs">Edit</button>
-                                                    <button class="btn btn-danger btn-xs">Delete</button>
+                                                <td align="center">{{ $index + $db_smpitdu->firstItem() }}</td>
+                                                <td> <img src="{{ asset('fotowakil/'.$ds->foto)}}" alt="" style="max-height: 151px; max-width: 100px;"></td>
+                                                <td>{{ $ds->nama }}</td>
+                                                <td>{{ $ds->jabatan }}</td>
+                                                <td class="btn-group">
+                                                    <button type="button" class="btn btn-primary btn-xs">Action</button>
+                                                    <button type="button" class="btn btn-primary btn-xs dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                                        <span class="sr-only">Toggle Dropdown</span>
+                                                    </button>
+                                                    <div class="dropdown-menu" role="menu">
+                                                        <a class="dropdown-item" href='/tampilkandatawakil/{{ $ds->id }}'>Edit</a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item" href='/deletewakil/{{ $ds->id }}'>Hapus</a>
+                                                    </div>
                                                 </td>
-
                                             </tr>
-                                            <tr>
-                                                <td align="center">2</td>
-                                                <td><img src={{ asset('../template/img/muka.png') }} width="70" height="70"></td>
-                                                <td>Asmonah, S.Ag, M.Pd</td>
-                                                <td>Wakil Kepala Bagian Humas</td>
-                                                <td align="center">
-                                                    <button class="btn btn-info btn-xs">Edit</button>
-                                                    <button class="btn btn-danger btn-xs">Delete</button>
-                                                </td>
 
-                                            </tr>
-                                            <tr>
-                                                <td align="center">3</td>
-                                                <td><img src={{ asset('../template/img/muka.png') }} width="70" height="70"></td>
-                                                <td>Mujiwanto, M.Pd</td>
-                                                <td>Wakil Kepala Bagian Kurikulum</td>
-                                                <td align="center">
-                                                    <button class="btn btn-info btn-xs">Edit</button>
-                                                    <button class="btn btn-danger btn-xs">Delete</button>
-                                                </td>
-
-                                            </tr>
-                                            <tr>
-                                                <td align="center">4</td>
-                                                <td><img src={{ asset('../template/img/muka.png') }} width="70" height="70"></td>
-                                                <td>Sa'dun, S.Pd.M.Si</td>
-                                                <td>Wakil Kepala Bagian Sarpras</td>
-                                                <td align="center">
-                                                    <button class="btn btn-info btn-xs">Edit</button>
-                                                    <button class="btn btn-danger btn-xs">Delete</button>
-                                                </td>
-
-                                            </tr>
-                                            
                                         </tbody>
+                                        @endforeach
                                     </table>
+                                    {{ $db_smpitdu->links() }}
+                                    <!-- Modal -->
                                 </div>
                             </div>
                         </div>
@@ -139,21 +119,22 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Bersiap untuk Keluar?</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-body">Anda perlu memasukan ulang username dan kata sandi ketika masuk halaman, apakah anda yakin?</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <a class="btn btn-primary" href="login">Logout</a>
                 </div>
             </div>
         </div>
     </div>
 
-   
+
+
     @include('template.script')
 
 </body>

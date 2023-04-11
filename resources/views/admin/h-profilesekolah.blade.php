@@ -34,12 +34,16 @@
                     <!-- Page Heading -->
                     <h1 class="h3 mb-4 text-gray-800"><b>Profile Sekolah</b></h1>
                     <div class="card mb-4">
-                        <div class="card-header">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#myModal">
-                                Tambah Foto
-                            </button>
+                    <div class="card-header">
+                            <!-- Button trigger modal -->
+                            <a href="/tambahfoto" class="btn btn-primary">Tambah Foto</a>
+                            <a href="/trashprofile" class="btn btn-danger">Sampah</a>
                         </div>
+                        @if ($message = Session::get('success'))
+                        <div class="alert alert-primary" role="alert">
+                            {{$message}}
+                        </div>
+                        @endif
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
                                 <h6 class="m-0 font-weight-bold text-primary">Data Foto</h6>
@@ -49,55 +53,36 @@
                                     <table class="table table-bordered table-hover table-striped">
                                         <thead>
                                             <tr>
-                                                <th width="50" height="10">No.</th>
-                                                <th>Foto</th>
-                                                <th width="300" height="10">Aksi</th>
+                                                <th class="text-center" width="50" height="10">No.</th>
+                                                <th class="text-center">Foto</th>
+                                                <th class="text-center" width="100" height="10">Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach($db_smpitdu as $index => $ds)
+                                        <tbody>
                                             <tr>
-                                                <td align="center">1</td>
-                                                <td><img src={{ asset('../template/img/1.png') }} width="200" height="100"></td>
-                                                <td align="center">
-                                                    <button class="btn btn-success btn-xs">View</button>
-                                                    <button class="btn btn-info btn-xs">Edit</button>
-                                                    <button class="btn btn-danger btn-xs">Delete</button>
+                                                <td align="center" scope="ds">{{ $index + $db_smpitdu->firstItem() }}</td>
+                                                <td>
+                                                    <img src="{{ asset('fotosekolah/'.$ds->foto)}}" alt="" style="height: 100px;">
                                                 </td>
-
-                                            </tr>
-                                            <tr>
-                                                <td align="center">2</td>
-                                                <td><img src={{ asset('../template/img/2.png') }} width="200" height="100"></td>
-                                                <td align="center">
-                                                    <button class="btn btn-success btn-xs">View</button>
-                                                    <button class="btn btn-info btn-xs">Edit</button>
-                                                    <button class="btn btn-danger btn-xs">Delete</button>
+                                                <td class="btn-group mt-4" >
+                                                    <button type="button" class="btn btn-primary btn-xs">Action</button>
+                                                    <button type="button" class="btn btn-primary btn-xs dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                                        <span class="sr-only">Toggle Dropdown</span>
+                                                    </button>
+                                                    <div class="dropdown-menu" role="menu">
+                                                        <a class="dropdown-item" href='/tampilkandataprofile/{{ $ds->id }}'>Edit</a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item" href='/deleteprofile/{{ $ds->id }}'>Hapus</a>
+                                                    </div>
                                                 </td>
-
                                             </tr>
-                                            <tr>
-                                                <td align="center">3</td>
-                                                <td><img src={{ asset('../template/img/3.png') }} width="200" height="100"></td>
-                                                <td align="center">
-                                                    <button class="btn btn-success btn-xs">View</button>
-                                                    <button class="btn btn-info btn-xs">Edit</button>
-                                                    <button class="btn btn-danger btn-xs">Delete</button>
-                                                </td>
-
-                                            </tr>
-                                            <tr>
-                                                <td align="center">4</td>
-                                                <td><img src={{ asset('../template/img/4.png') }} width="200" height="100"></td>
-                                                <td align="center">
-                                                    <button class="btn btn-success btn-xs">View</button>
-                                                    <button class="btn btn-info btn-xs">Edit</button>
-                                                    <button class="btn btn-danger btn-xs">Delete</button>
-                                                </td>
-
-                                            </tr>
-                                        
                                         </tbody>
+                                        @endforeach
                                     </table>
+                                    {{ $db_smpitdu->links() }}
+                                    <!-- Modal -->
                                 </div>
                             </div>
                         </div>
@@ -139,7 +124,7 @@
                 <div class="modal-body">Anda perlu memasukan ulang username dan kata sandi ketika masuk halaman, apakah anda yakin?</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <a class="btn btn-primary" href="login">Logout</a>
                 </div>
             </div>
         </div>
